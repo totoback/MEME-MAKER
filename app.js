@@ -1,17 +1,31 @@
 const canvas = document.querySelector("canvas");
-
 const ctx = canvas.getContext("2d");
-canvas.height = 800;
-canvas.width = 800;
+const lineWidth = document.querySelector("#line-width");
+const color = document.querySelector("#color");
+const colorOptions = Array.from(
+  document.getElementsByClassName("color-option")
+);
+const modeBtn = document.querySelector("#mode-btn");
+const resetBtn = document.querySelector("#reset-btn");
+const eraserBtn = document.querySelector("#eraser-btn");
+const file = document.querySelector("#file");
 
-ctx.lineWidth = 2;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 600;
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
+
+ctx.lineWidth = lineWidth.value;
 let isPainting = false;
+let isFilling = false;
+// 패스 그리기
 function onMove(event) {
   if (isPainting) {
     ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();
     return;
   }
+  ctx.beginPath();
   ctx.moveTo(event.offsetX, event.offsetY);
 }
 function startPainting() {
@@ -20,10 +34,70 @@ function startPainting() {
 function cancelPainting() {
   isPainting = false;
 }
+// 라인 두께 변경
+function onLineWidthChange(event) {
+  ctx.lineWidth = event.target.value;
+}
+// 컬러 스포이드 변경
+function onColorChange(event) {
+  ctx.strokeStyle = event.target.value;
+  ctx.fillStyle = event.target.value;
+}
+// 지정 컬러 변경
+function onColorClick(event) {
+  const colorValue = event.target.dataset.color;
+  ctx.strokeStyle = colorValue;
+  ctx.fillStyle = colorValue;
+  color.value = colorValue;
+}
+function onModeClick() {
+  if (isFilling) {
+    isFilling = false;
+    modeBtn.innerText = "Fill";
+  } else {
+    isFilling = true;
+    modeBtn.innerText = "Draw";
+  }
+}
+// fill 색상 채우기
+function onCanvasClick() {
+  if (isFilling) {
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  }
+}
+// reset 지우기 버튼 생성
+function onDestroyClick() {
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+}
+function onEraserClick() {
+  ctx.strokeStyle = "white";
+  isFilling = false;
+  modeBtn.innerText = "Fill";
+}
+function onFileChange(event) {
+  const files = event.target.files[0];
+  const url = URL.createObjectURL(files);
+  const img = new Image();
+  img.src = url;
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  };
+}
+canvas.onmousemove = onMove;
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
-canvas.addEventListener("mouseleave", cancelPainting)
+canvas.addEventListener("mouseleave", cancelPainting);
+canvas.addEventListener("click", onCanvasClick);
+
+lineWidth.addEventListener("change", onLineWidthChange);
+color.addEventListener("change", onColorChange);
+colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
+modeBtn.addEventListener("click", onModeClick);
+resetBtn.addEventListener("click", onDestroyClick);
+eraserBtn.addEventListener("click", onEraserClick);
+file.addEventListener("change", onFileChange);
 
 // *컬러 라인
 // ctx.lineWidth = 2;

@@ -1,12 +1,19 @@
-canvas{
+canvas {
   /* width: 800px; */
   /* height: 800px; */
   border: 3px solid #e1e1e1;
   border-radius: 30px;
+  margin: 0 auto;
 }
 
-body{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body {
+  width: 600px;
+  margin: 0 auto !important; 
+}
+
+.color-option {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
