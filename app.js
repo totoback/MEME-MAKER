@@ -9,6 +9,7 @@ const modeBtn = document.querySelector("#mode-btn");
 const resetBtn = document.querySelector("#reset-btn");
 const eraserBtn = document.querySelector("#eraser-btn");
 const file = document.querySelector("#file");
+const textInput = document.querySelector("#text");
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
@@ -84,7 +85,13 @@ function onFileChange(event) {
     ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
 }
+function onDoubleClick(event) {
+  const text = textInput.value;
+  ctx.lineWidth = 1;
+  ctx.strokeText(text, event.offsetX, event.offsetY);
+}
 canvas.onmousemove = onMove;
+canvas.addEventListener("dblclick", onDoubleClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
