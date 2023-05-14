@@ -71,11 +71,13 @@ function onDestroyClick() {
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
+// 지우개 라인으로 만들기
 function onEraserClick() {
   ctx.strokeStyle = "white";
   isFilling = false;
   modeBtn.innerText = "Fill";
 }
+// 파일 등록하기
 function onFileChange(event) {
   const files = event.target.files[0];
   const url = URL.createObjectURL(files);
@@ -85,6 +87,7 @@ function onFileChange(event) {
     ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
 }
+// 도장 스탬프 만들기
 function onDoubleClick(event) {
   const text = textInput.value;
   ctx.lineWidth = 1;
