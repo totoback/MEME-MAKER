@@ -5,6 +5,7 @@ const color = document.querySelector("#color");
 const colorOptions = Array.from(
   document.getElementsByClassName("color-option")
 );
+const saveBtn = document.querySelector("#save");
 const modeBtn = document.querySelector("#mode-btn");
 const resetBtn = document.querySelector("#reset-btn");
 const eraserBtn = document.querySelector("#eraser-btn");
@@ -17,6 +18,7 @@ canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
 ctx.lineWidth = lineWidth.value;
+ctx.lineCap = "round"; //모서리 라인 라운드 처리
 let isPainting = false;
 let isFilling = false;
 // 패스 그리기
@@ -93,7 +95,17 @@ function onDoubleClick(event) {
   ctx.lineWidth = 1;
   ctx.strokeText(text, event.offsetX, event.offsetY);
 }
+// 내 그림 이미지로 저장하기 만들기
+function onSaveClick() {
+  const url = canvas.toDataURL();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "myDrawing.png";
+  a.click();
+}
+
 canvas.onmousemove = onMove;
+canvas.addEventListener("click", onSaveClick)
 canvas.addEventListener("dblclick", onDoubleClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
